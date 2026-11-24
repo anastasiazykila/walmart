@@ -72,10 +72,9 @@ def reduce_categories(data, column, top_n=10):
     top_categories = data[column].value_counts().nlargest(top_n).index
     return data[column].apply(lambda x: x if x in top_categories else 'Other')
 
-columns_to_reduce = ['City', 'Product_Name', 'Category']
-for col in columns_to_reduce:
-    if col in df_cleaned.columns:
-        df_cleaned[col] = reduce_categories(df_cleaned, col, top_n=10)
+# Hanya Category yang di-group jadi Top 10 + Other
+top_categories = df['Category'].value_counts().nlargest(10).index
+df['Category'] = df['Category'].apply(lambda x: x if x in top_categories else 'Other')
 
 st.write("✅ Cleaning selesai: duplikat dihapus, NaN dihapus, tanggal dikonversi, kategori disederhanakan jadi Top 10 + Other.")
 st.dataframe(df_cleaned.head())
